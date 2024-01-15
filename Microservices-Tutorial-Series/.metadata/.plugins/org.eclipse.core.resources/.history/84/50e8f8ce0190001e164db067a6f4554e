@@ -1,0 +1,33 @@
+server.port= 8084
+spring.application.name=API-GATEWAY
+eureka.client.fetch-registry=true
+eureka.client.register-with-eureka=true
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka
+eureka.instance.prefer-ip-address=true
+# Spring Cloud Gateway configuration
+spring.cloud.gateway.routes[0].id = USER-SERVICE
+spring.cloud.gateway.routes[0].uri = lb://USER-SERVICE 
+spring.cloud.gateway.routes[0].predicates[0] = Path=/users/**
+spring.cloud.gateway.routes[0].filters=AuthenticationFilter    
+# example lb://USER-SERVICE/users/**then anything
+spring.cloud.gateway.routes[1].id = HOTEL-SERVICE
+spring.cloud.gateway.routes[1].uri =  lb://HOTEL-SERVICE  
+spring.cloud.gateway.routes[1].predicates[0] = Path=/hotels/**,/staffs/**
+spring.cloud.gateway.routes[1].filters=AuthenticationFilter   
+spring.cloud.gateway.routes[2].id = RATING-SERVICE
+spring.cloud.gateway.routes[2].uri = lb://RATING-SERVICE                              
+#spring.cloud.gateway.routes[2].uri=http://localhost:8082 Replace with the URL of your microservice 3
+spring.cloud.gateway.routes[2].predicates[0] = Path=/ratings/**
+spring.cloud.gateway.routes[2].filters=AuthenticationFilter   
+
+
+#spring.cloud.gateway.routes[3].id = AUTH-SERVICE
+#spring.cloud.gateway.routes[3].uri =  lb://AUTH-SERVICE  
+#spring.cloud.gateway.routes[3].predicates[0] = Path=/auth/**
+
+
+#http://localhost:8084/hotels/
+#http://localhost:8084/ratings/
+#http://localhost:8084/users/-----is used to get user
+#http://localhost:8084/users/47383621-b36c-4f69-b6b3-36b82fd8771f----is used to get one user
+#http://localhost:8084/users---is used to save user
